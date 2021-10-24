@@ -1,34 +1,35 @@
-name: Continuoes Integration and Delivery
+name: Continuous Integration and Delivery
 
 on: [push]
 
 env:
-  IMAGE: docker.pkg.github.com/$(echo $GITHUB_REPOSITORY | tr '[A-Z]' '[a-z]'/summarizer)
+  IMAGE: docker.pkg.github.com/$(echo $GITHUB_REPOSITORY | tr '[A-Z]' '[a-z]')/summarizer
 
 jobs:
+
   build:
     name: Build Docker Image
     runs-on: ubuntu-latest
     steps:
       - name: Checkout master
         uses: actions/checkout@v2.3.4
-      - name: Log in to Github Packages
+      - name: Log in to GitHub Packages
         run: echo ${GITHUB_TOKEN} | docker login -u ${GITHUB_ACTOR} --password-stdin docker.pkg.github.com
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN  }}
-      - name: Pull Image
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Pull image
         run: |
           docker pull ${{ env.IMAGE }}:latest || true
-      - name: Docker Build
+      - name: Build image
         run: |
           docker build \
             --cache-from ${{ env.IMAGE }}:latest \
             --tag ${{ env.IMAGE }}:latest \
             --file ./project/Dockerfile.prod \
             "./project"
-      - name: Push Image
+      - name: Push image
         run: |
-          docker push ${{ env.IMAGE}}:latest
+          docker push ${{ env.IMAGE }}:latest
 
   test:
     name: Test Docker Image
@@ -37,11 +38,14 @@ jobs:
     steps:
       - name: Checkout master
         uses: actions/checkout@v2.3.4
-      - name: Log in to Github Packages
-        run: echo ${GITHUB_TOKEN} | docker login -${GITHUB_ACTOR} --password-stdin docker
-        env: 
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN  }}
-      - name: Pull Image
+      - name: Log in to GitHub Packages
+        run: echo ${GITHUB_TOKEN} | docker login -u ${GITHUB_ACTOR} --password-stdin docker.pkg.github.com
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Pull image
+        run: |
+          docker pull ${{ env.IMAGE }}:latest || true
+      - name: Build image
         run: |
           docker build \
             --cache-from ${{ env.IMAGE }}:latest \
