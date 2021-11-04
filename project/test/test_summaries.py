@@ -40,7 +40,7 @@ def test_read_summary(test_app_with_db: FastAPI):
     assert response_dict["id"] == summary_id
     assert response_dict["url"] == "https://foo.bar"
     assert response_dict["summary"]
-    assert response_dict["create_at"]
+    assert response_dict["created_at"]
 
 
 def test_read_summary_incorrect_id(test_app_with_db: FastAPI):
@@ -121,7 +121,7 @@ def test_update_summary(test_app_with_db: FastAPI):
     assert response_dict["id"] == summary_id
     assert response_dict["url"] == "https://foo.bar"
     assert response_dict["summary"] == "updated!"
-    assert response_dict["create_at"]
+    assert response_dict["created_at"]
 
 
 @pytest.mark.parametrize(
