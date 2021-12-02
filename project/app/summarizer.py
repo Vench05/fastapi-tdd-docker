@@ -1,5 +1,4 @@
 import nltk
-
 from newspaper import Article
 
 
