@@ -14,4 +14,4 @@ def generate_summary(url: str) -> str:
     finally:
         article.nlp()
 
-    return article.summary()
+    return article.summary
