@@ -4,3 +4,4 @@ venv
 .coverage
 .coveragerc
 htmlcov/
+.pytest_cache/
